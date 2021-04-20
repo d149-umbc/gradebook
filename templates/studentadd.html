@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+
+            <div class="row">
+            <form action="/student/add" method="POST">
+                <!--<textarea name="contents" placeholder="Enter a comment" class="form-control"></textarea> -->
+                  <div class="form-group">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" class="form-control" placeholder="First name" id="firstname" name="firstname">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" class="form-control" placeholder="Last name" id="lastname" name="lastname">
+                </div>
+                <div class="form-group">
+                    <label for="studentid">Student ID</label>
+                    <input type="text" class="form-control" placeholder="xxxxxxxxxxx" id="studentid" name="studentid">
+                </div>
+                <div class="form-group">
+                    <label for="major">Student Major</label>
+                    <input type="text" class="form-control" placeholder="Information Systems" id="major" name="major">
+                </div>
+                  <div class="form-group">
+                    <label for="email">Email address:</label>
+                    <input type="email" class="form-control" placeholder="Enter email" id="email" name="email">
+                </div>
+
+
+                <input type="submit" value="Add Student" class="btn btn-success">
+            </form>
+        </div>
+
+
+
+</div><!-- /.container -->
+{% endblock %}
