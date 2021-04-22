@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+<h2> Class Roster </h2>
+       {% for s in students %}
+            <div class="row">
+
+                    {{ s.lastname }}, {{ s.firstname }}
+
+             </div>
+        {% endfor %}
+
+</div><!-- /.container -->
+{% endblock %}
