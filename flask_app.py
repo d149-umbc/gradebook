@@ -107,6 +107,22 @@ def add_student():
             return redirect(url_for('gradebook'))
             #return fn
 
+@app.route('/student/delete', methods=["GET", "POST"])
+def delete_student():
+        if request.method == "GET":
+            students = Student.query.order_by(Student.lastname).all()
+            return render_template("studentdelete.html", students = students)
+        elif request.method == "POST":
+            studid = int(request.form['sid'])
+            sid = Student.query.filter_by(id= studid).first()
+            db.session.delete(sid)
+            db.session.commit()
+            db.session.query(Score).filter_by(studentid = studid).delete()
+            #scorewipe = Score.query.filter_by(studentid = sid).all()
+            #db.session.delete(scorewipe)
+            db.session.commit()
+            return redirect(url_for('gradebook'))
+
 
 
 
