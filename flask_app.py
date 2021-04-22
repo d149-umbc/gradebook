@@ -125,6 +125,12 @@ def delete_student():
 
 
 
+@app.route('/report/roster')
+def class_roster():
+        students = Student.query.order_by(Student.lastname).all()
+        return render_template("reportroster.html", students = students)
+
+
 
 """
 @app.route('/comments', methods=["GET", "POST"])
