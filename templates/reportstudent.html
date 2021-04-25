@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+
+
+       {% for s in students %}
+            <div class="row">
+                <form method="POST" action="/report/student">
+                    <input type="hidden" name="sid" value={{ s.id }}>
+                    <input type="submit" value="Get">
+                    {{ s.lastname }}, {{ s.firstname }}
+
+                </form>
+
+
+            </div>
+        {% endfor %}
+
+
+</div><!-- /.container -->
+{% endblock %}
