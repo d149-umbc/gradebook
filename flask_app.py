@@ -3,7 +3,7 @@
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-
+from statistics import mean, median
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -163,9 +163,33 @@ def report_student():
             else:
                 average = "-"
 
-
-            print(scoretable)
             return render_template("reportstudentview.html", student = sid, scoretable=scoretable, average=average)
+
+
+@app.route('/report/assignments', methods=["GET"])
+def report_assignments():
+    avgtable = { }
+    assignments = Assignment.query.order_by(Assignment.date).all()
+    for a in assignments:
+        avgrow = { "name":a.name, "date":a.date, "maxscore": a.maxscore, "min": 10000, "max":0, "average":"", "median":""}
+        scores = scores = Score.query.filter_by(assignmentid = a.id).all()
+        pv = []
+        for s in scores:
+            if s.score < avgrow["min"]:
+                avgrow["min"] = s.score
+            if s.score > avgrow["max"]:
+                avgrow["max"] = s.score
+
+            pv.append(s.score)
+        avgrow["average"] = mean(pv)
+        avgrow["median"] = median(pv)
+        avgrow["n"] = len(pv)
+        avgtable[a.id] = avgrow
+
+    return render_template("reportassignments.html", avgtable = avgtable)
+
+
+
 
 
 
