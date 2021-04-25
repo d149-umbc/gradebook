@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+<h2> Student Report </h2>
+
+            <div class="row">
+                    <p><strong>Name: </strong>{{ student.lastname }}, {{ student.firstname }}</p><br>
+            </div>
+            <div class="row">
+                    <p><strong>Student ID: </strong>{{ student.studentid }}
+            </div>
+            <div class="row">
+                    <p><strong>Major: </strong>{{ student.major }}</p>
+            </div>
+            <div class="row">
+                    <p><strong>Email: </strong>{{ student.email }}</p>
+             </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <th>Assignment</th><th>Due Date</th><th>Max Points</th><th>Points Earned</th><th>Percentage</th>
+
+                </thead>
+
+
+
+
+             {% for s in scoretable.values(): %}
+                <tr>
+                <td>{{ s.name  }}</td><td> {{s.date}} </td> <td>{{ s.maxscore }}</td> <td>{{ s.score }}</td><td> {{ s.percent }}%</td>
+                </tr>
+            {%endfor%}
+            <tr>
+                <td colspan="4" style="text-align: right;"> <strong>Average:</strong></td><td> {{ average }}% </td>
+
+            </tr>
+            <tr>
+                <td colspan="5"> <small class="text-muted">Displayed average is calculated by averaging the averages of all individual assignments. Assignments without grades are excluded from average calculation. </td>
+            </tr>
+
+            </table>
+
+
+</div><!-- /.container -->
+{% endblock %}

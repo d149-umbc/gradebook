@@ -132,6 +132,45 @@ def class_roster():
 
 
 
+
+
+@app.route('/report/student', methods=["GET", "POST"])
+def report_student():
+        if request.method == "GET":
+            students = Student.query.order_by(Student.lastname).all()
+            return render_template("reportstudent.html", students = students)
+        elif request.method == "POST":
+            studid = int(request.form['sid'])
+            sid = Student.query.filter_by(id= studid).first()
+            assignments = Assignment.query.order_by(Assignment.date).all()
+            scores = Score.query.filter_by(studentid = sid.id).all()
+
+
+            scoretable = {}
+            for a in assignments:
+                scoretable[a.id]  = {"name":a.name, "maxscore": a.maxscore, "date":a.date, "score":"", "percent":""}
+
+            totalpts = 0
+            assigns = 0
+            for s in scores:
+                scoretable[s.assignmentid]["score"]  = s.score
+                scoretable[s.assignmentid]["percent"]  = s.score/ scoretable[s.assignmentid]["maxscore"] * 100
+                totalpts += scoretable[s.assignmentid]["percent"]
+                assigns +=1
+
+            if assigns > 0:
+                average = (totalpts / assigns)
+            else:
+                average = "-"
+
+
+            print(scoretable)
+            return render_template("reportstudentview.html", student = sid, scoretable=scoretable, average=average)
+
+
+
+
+
 """
 @app.route('/comments', methods=["GET", "POST"])
 def comments_handler():
