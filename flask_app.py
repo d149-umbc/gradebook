@@ -3,7 +3,7 @@
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from statistics import mean, median
+
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -46,10 +46,10 @@ class Score(db.Model):
 app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-    username="d149",
+    username="brentdavis771",
     password="mysqlpythonanywhere",
-    hostname="d149.mysql.pythonanywhere-services.com",
-    databasename="d149$gradebook",
+    hostname="brentdavis771.mysql.pythonanywhere-services.com",
+    databasename="brentdavis771$gradebook",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
@@ -123,75 +123,41 @@ def delete_student():
             db.session.commit()
             return redirect(url_for('gradebook'))
 
+@app.route('/assignment/add', methods=["GET", "POST"])
+def add_assignment():
+        if request.method == "GET":
+            return render_template("assignmentadd.html")
+
+        elif request.method == "POST":
+            fn = request.form['name']
+            addme = Assignment(name = fn, maxscore = request.form["maxscore"], date = request.form["date"] )
+            db.session.add(addme)
+            db.session.commit()
+            return redirect(url_for('gradebook'))
+
+
+
+@app.route('/assignment/delete', methods=["GET", "POST"])
+def delete_assignment():
+        if request.method == "GET":
+            assignments = Assignment.query.order_by(Assignment.name).all()
+            return render_template("assignmentdelete.html", assignments = assignments)
+        elif request.method == "POST":
+            asid = int(request.form['aid'])
+            aid = Assignment.query.filter_by(id= asid).first()
+            db.session.delete(aid)
+            db.session.commit()
+            db.session.query(Score).filter_by(assignmentid = asid).delete()
+            #scorewipe = Score.query.filter_by(assignmentid = asid).all()
+            #db.session.delete(scorewipe)
+            db.session.commit()
+            return redirect(url_for('gradebook'))
 
 
 @app.route('/report/roster')
 def class_roster():
         students = Student.query.order_by(Student.lastname).all()
         return render_template("reportroster.html", students = students)
-
-
-
-
-
-@app.route('/report/student', methods=["GET", "POST"])
-def report_student():
-        if request.method == "GET":
-            students = Student.query.order_by(Student.lastname).all()
-            return render_template("reportstudent.html", students = students)
-        elif request.method == "POST":
-            studid = int(request.form['sid'])
-            sid = Student.query.filter_by(id= studid).first()
-            assignments = Assignment.query.order_by(Assignment.date).all()
-            scores = Score.query.filter_by(studentid = sid.id).all()
-
-
-            scoretable = {}
-            for a in assignments:
-                scoretable[a.id]  = {"name":a.name, "maxscore": a.maxscore, "date":a.date, "score":"", "percent":""}
-
-            totalpts = 0
-            assigns = 0
-            for s in scores:
-                scoretable[s.assignmentid]["score"]  = s.score
-                scoretable[s.assignmentid]["percent"]  = s.score/ scoretable[s.assignmentid]["maxscore"] * 100
-                totalpts += scoretable[s.assignmentid]["percent"]
-                assigns +=1
-
-            if assigns > 0:
-                average = (totalpts / assigns)
-            else:
-                average = "-"
-
-            return render_template("reportstudentview.html", student = sid, scoretable=scoretable, average=average)
-
-
-@app.route('/report/assignments', methods=["GET"])
-def report_assignments():
-    avgtable = { }
-    assignments = Assignment.query.order_by(Assignment.date).all()
-    for a in assignments:
-        avgrow = { "name":a.name, "date":a.date, "maxscore": a.maxscore, "min": 10000, "max":0, "average":"", "median":""}
-        scores = scores = Score.query.filter_by(assignmentid = a.id).all()
-        pv = []
-        for s in scores:
-            if s.score < avgrow["min"]:
-                avgrow["min"] = s.score
-            if s.score > avgrow["max"]:
-                avgrow["max"] = s.score
-
-            pv.append(s.score)
-        avgrow["average"] = mean(pv)
-        avgrow["median"] = median(pv)
-        avgrow["n"] = len(pv)
-        avgtable[a.id] = avgrow
-
-    return render_template("reportassignments.html", avgtable = avgtable)
-
-
-
-
-
 
 
 
