@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+<h2> Assignment Averages </h2>
+
+            <table class="table table-bordered">
+                <thead>
+                    <th>Assignment</th><th>Due Date</th><th>Max Points</th><th># turned in</th><th>Minimum</th><th>Maxmimum</th><th>Average</th><th>Median</th>
+
+                </thead>
+
+
+       {% for a in avgtable.values() %}
+            <tr>
+                <td>{{a.name}}</td>
+                <td>{{a.date}}</td>
+                <td>{{a.maxscore}}</td>
+                <td>{{a.n}}</td>
+                <td>{{a.min}}</td>
+                <td>{{a.max}}</td>
+                <td>{{a.average}}</td>
+                <td>{{a.median}}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+
+</div><!-- /.container -->
+{% endblock %}
