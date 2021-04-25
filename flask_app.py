@@ -123,7 +123,37 @@ def delete_student():
             db.session.commit()
             return redirect(url_for('gradebook'))
 
+@app.route('/assignment/add', methods=["GET", "POST"])
+def add_assignment():
+        if request.method == "GET":
+            return render_template("assignmentadd.html")
 
+        elif request.method == "POST":
+            fn = request.form['name']
+            addme = Assignment(name = fn, maxscore = request.form["maxscore"], date = request.form["date"] )
+            db.session.add(addme)
+            db.session.commit()
+            return redirect(url_for('gradebook'))
+
+
+
+@app.route('/assignment/delete', methods=["GET", "POST"])
+def delete_assignment():
+        if request.method == "GET":
+            assignments = Assignment.query.order_by(Assignment.name).all()
+            return render_template("assignmentdelete.html", assignments = assignments)
+        elif request.method == "POST":
+            asid = int(request.form['aid'])
+            aid = Assignment.query.filter_by(id= asid).first()
+            db.session.delete(aid)
+            db.session.commit()
+            db.session.query(Score).filter_by(assignmentid = asid).delete()
+            #scorewipe = Score.query.filter_by(assignmentid = asid).all()
+            #db.session.delete(scorewipe)
+            db.session.commit()
+            return redirect(url_for('gradebook'))
+        
+        
 
 @app.route('/report/roster')
 def class_roster():
