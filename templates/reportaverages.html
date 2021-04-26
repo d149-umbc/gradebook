@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="container">
+<h2> Class Averages </h2>
+
+
+            <table class="table table-bordered">
+                <thead>
+                    <th> Student Name</th> <th>Class Average</th>
+                </thead>
+
+
+       {% for r in result.values() %}
+            <tr><td>{{ r.lastname }}, {{ r.firstname }}</td><td> {{ r.average }}%</td></tr>
+        {% endfor %}
+        </table>
+
+</div><!-- /.container -->
+{% endblock %}
