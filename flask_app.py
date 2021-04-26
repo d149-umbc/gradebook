@@ -152,8 +152,6 @@ def delete_assignment():
             #db.session.delete(scorewipe)
             db.session.commit()
             return redirect(url_for('gradebook'))
-        
-        
 
 @app.route('/report/roster')
 def class_roster():
@@ -217,6 +215,34 @@ def report_assignments():
         avgtable[a.id] = avgrow
 
     return render_template("reportassignments.html", avgtable = avgtable)
+
+
+@app.route('/report/averages')
+def report_averages():
+    students = Student.query.order_by(Student.lastname).all()
+    result = {}
+    for s in students:
+            #copied mostly from indivdual student report -- should be a method/function
+            assignments = Assignment.query.order_by(Assignment.date).all()
+            maxpointlist = { }
+            for a in assignments:
+                maxpointlist[a.id] = a.maxscore
+
+
+            scores = Score.query.filter_by(studentid = s.id).all()
+            scorelist = []
+            for score in scores:
+                scorelist.append(score.score / maxpointlist[score.assignmentid])
+
+            result[s.id] = {"lastname": s.lastname, "firstname": s.firstname, "average": round((mean(scorelist) *100), 2)}
+
+    return render_template("reportaverages.html", result = result)
+
+
+
+
+
+
 
 
 
