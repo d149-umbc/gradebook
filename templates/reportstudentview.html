@@ -27,7 +27,7 @@
 
              {% for s in scoretable.values(): %}
                 <tr>
-                <td>{{ s.name  }}</td><td> {{s.date}} </td> <td>{{ s.maxscore }}</td> <td>{{ s.score }}</td><td> {{ s.percent }}%</td>
+                <td>{{ s.name  }}</td><td> {{s.date.strftime("%m/%d/%Y")}} </td> <td>{{ s.maxscore }}</td> <td>{{ s.score }}</td><td> {{ s.percent }}%</td>
                 </tr>
             {%endfor%}
             <tr>

@@ -13,7 +13,7 @@
        {% for a in avgtable.values() %}
             <tr>
                 <td>{{a.name}}</td>
-                <td>{{a.date}}</td>
+                <td>{{a.date.strftime("%m/%d/%Y")}}</td>
                 <td>{{a.maxscore}}</td>
                 <td>{{a.n}}</td>
                 <td>{{a.min}}</td>
