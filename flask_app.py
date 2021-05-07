@@ -41,15 +41,13 @@ class Score(db.Model):
 
 
 
-
-
 app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-    username="d149",
+    username="brentdavis771",
     password="mysqlpythonanywhere",
-    hostname="d149.mysql.pythonanywhere-services.com",
-    databasename="d149$gradebook",
+    hostname="brentdavis771.mysql.pythonanywhere-services.com",
+    databasename="brentdavis771$gradebook",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
@@ -148,7 +146,7 @@ def delete_assignment():
             db.session.delete(aid)
             db.session.commit()
             db.session.query(Score).filter_by(assignmentid = asid).delete()
-            #scorewipe = Score.query.filter_by(assignmentid = asid).all()
+            #scorewipe = Score.query.filter_by(assignmentid = aid).all()
             #db.session.delete(scorewipe)
             db.session.commit()
             return redirect(url_for('gradebook'))
@@ -176,7 +174,7 @@ def report_student():
 
             scoretable = {}
             for a in assignments:
-                scoretable[a.id]  = {"name":a.name, "maxscore": a.maxscore, "date":a.date, "score":"", "percent":""}
+                scoretable[a.id]  = {"name":a.name, "maxscore": a.maxscore, "date":a.date, "score":"-", "percent":"-"}
 
             totalpts = 0
             assigns = 0
@@ -199,7 +197,7 @@ def report_assignments():
     avgtable = { }
     assignments = Assignment.query.order_by(Assignment.date).all()
     for a in assignments:
-        avgrow = { "name":a.name, "date":a.date, "maxscore": a.maxscore, "min": 10000, "max":0, "average":"", "median":""}
+        avgrow = { "name":a.name, "date":a.date, "maxscore": a.maxscore, "min": 10000, "max":0, "average":"-", "median":"-"}
         scores = scores = Score.query.filter_by(assignmentid = a.id).all()
         pv = []
         for s in scores:
@@ -209,8 +207,14 @@ def report_assignments():
                 avgrow["max"] = s.score
 
             pv.append(s.score)
-        avgrow["average"] = mean(pv)
-        avgrow["median"] = median(pv)
+        if len(pv) > 0:
+            avgrow["average"] = mean(pv)
+            avgrow["median"] = median(pv)
+        else:
+            avgrow["min"] = "-"
+            avgrow["max"] = "-"
+
+
         avgrow["n"] = len(pv)
         avgtable[a.id] = avgrow
 
@@ -234,7 +238,12 @@ def report_averages():
             for score in scores:
                 scorelist.append(score.score / maxpointlist[score.assignmentid])
 
-            result[s.id] = {"lastname": s.lastname, "firstname": s.firstname, "average": round((mean(scorelist) *100), 2)}
+            avg = "-"
+            if len(scorelist) > 0:
+                avg=round((mean(scorelist) *100), 2)
+
+
+            result[s.id] = {"lastname": s.lastname, "firstname": s.firstname, "average": avg}
 
     return render_template("reportaverages.html", result = result)
 
