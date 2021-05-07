@@ -1,11 +1,12 @@
+{% extends "layout.html" %}
 {% block main %}
 <div class="container">
 
 
        {% for a in assignments %}
             <div class="row">
-                <form method="POST" action="https://www.pythonanywhere.com/assignment/delete">
-                    <input type="hidden" name="aid" value="{{" a.id="" }}="">
+                <form method="POST" action="/assignment/delete">
+                    <input type="hidden" name="aid" value={{ a.id }}>
                     <input type="submit" value="Delete">
                     {{ a.name }}
 

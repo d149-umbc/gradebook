@@ -8,10 +8,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <title>Gradebook</title>
+        <style>/* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>
     </head>
 
-    <body>
+<body>
+<h1 class="p-2"><small>Junior English, Spring 2021</small></h1>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
     <a class="navbar-brand" href="/">Gradebook</a>
   <ul class="navbar-nav">
         <!-- Dropdown -->
@@ -29,8 +43,8 @@
         Assignments
       </a>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Add</a>
-        <a class="dropdown-item" href="#">Delete</a>
+        <a class="dropdown-item" href="/assignment/add">Add</a>
+        <a class="dropdown-item" href="/assignment/delete">Delete</a>
         </div>
     </li>
     <li class="nav-item dropdown">
@@ -38,11 +52,11 @@
         Reports
       </a>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="report/roster">Class Roster</a>
+        <a class="dropdown-item" href="/report/roster">Class Roster</a>
 
-        <a class="dropdown-item" href="report/averages">Class Averages</a>
-        <a class="dropdown-item" href="report/student">Single Student Report</a>
-        <a class="dropdown-item" href="report/assignments">Assignment Statistics</a>
+        <a class="dropdown-item" href="/report/averages">Class Averages</a>
+        <a class="dropdown-item" href="/report/student">Single Student Report</a>
+        <a class="dropdown-item" href="/report/assignments">Assignment Statistics</a>
         </div>
     </li>
 

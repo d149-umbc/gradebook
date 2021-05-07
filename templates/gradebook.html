@@ -9,7 +9,7 @@
       <th><!-- blank 1st column --> </th>
         {% for n in assignments %}
             <th style="text-align: center;">
-                {{ n.name }}<br> <small>/{{n.maxscore }} <br> {{ n.date }}</small>
+                {{ n.name }}<br> <small>/{{n.maxscore }} <br> {{ n.date.strftime("%m/%d/%Y") }}</small>
             </th>
         {% endfor %}
       </tr>
@@ -19,7 +19,7 @@
         <tr>
             <td>{{ namelookup[s] }} </td>
                 {% for v in table[s].keys() %}
-                    <td onclick="javascript:location.href='scoreedit/{{s}}/{{v}}'" style="text-align: center;">{{ table[s][v] }} </td>
+                    <td onclick="javascript:location.href='scoreedit/{{s}}/{{v}}'" style="text-align: center; cursor: pointer;">{{ table[s][v] }} </td>
                 {% endfor %}
 
 
